@@ -2,6 +2,8 @@
 
 一个专为 ComfyUI 学习者和创作者打造的**现代化、极速、无痛离线版智能节点说明书**。通过极低的学习门槛和贴心的 AI 提问辅助，帮助你快速掌握 ComfyUI 中成百上千个复杂节点的连接规则与核心技巧！
 
+🌐 **在线体验 (Live Demo)**: https://zhenghuijiang802-wq.github.io/comfyui-nodes-manual/
+
 ---
 
 ## 🌟 核心亮点 (Key Features)
@@ -53,7 +55,7 @@ comfyui-nodes-manual/
 如果你是开发者或 Git 用户：
 ```bash
 # 1. 克隆本项目
-git clone https://github.com/你的GitHub用户名/comfyui-nodes-manual.git
+git clone https://github.com/zhenghuijiang802-wq/comfyui-nodes-manual.git
 
 # 2. 进入项目文件夹
 cd comfyui-nodes-manual
