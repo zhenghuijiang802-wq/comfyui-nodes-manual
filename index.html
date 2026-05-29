@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ComfyUI 智能说明书 & AI 学习助手</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Sidebar Control Panel -->
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-logo">C</div>
+            <div class="brand-title">ComfyUI 智能说明书</div>
+        </div>
+        <div class="sidebar-scrollable">
+            <!-- Navigation Menu -->
+            <ul class="nav-menu">
+                <li class="nav-item active" data-target="home-panel">🏠 首页与连线心法</li>
+                <li class="nav-item" data-target="map-panel">🗺️ 全景功能地图</li>
+                <li class="nav-item" data-target="pkg-panel">🔌 插件安装包分类</li>
+                <li class="nav-item" data-target="glossary-panel">📕 术语词典速查</li>
+                <li class="nav-item" data-target="bookmarks-panel">⭐ 我的收藏节点</li>
+                <li class="nav-item" data-target="notes-panel">📝 我的学习笔记</li>
+            </ul>
+            
+            <!-- Category Tree -->
+            <div class="sidebar-divider">📁 ComfyUI 菜单分类</div>
+            <div class="tree-container" id="menu-tree">
+                <!-- Dynamic Nested Tree -->
+            </div>
+            
+            <!-- Model Tree -->
+            <div class="sidebar-divider">🤖 适配核心模型 (Models)</div>
+            <div class="tree-container" id="model-tree">
+                <!-- Dynamic Model Tree -->
+            </div>
+            
+
+        </div>
+    </aside>
+
+    <!-- Main Content Workspace -->
+    <main class="main-content">
+        <!-- Search Header -->
+        <header class="top-header">
+            <div class="search-box">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+                <input type="text" id="search-input" placeholder="输入中文功能、英文类名、所属插件包或常用语一键搜索...">
+            </div>
+            <div class="header-info">
+                <div id="status-text">说明书就绪</div>
+                <div style="font-size:0.7rem; opacity:0.6; margin-top:2px;">ComfyUI 端口 8000 · AI 互联系统</div>
+            </div>
+        </header>
+
+        <!-- Panels Container -->
+        <div class="panel-container">
+            <!-- Panel 1: Home & Guide -->
+            <div class="panel active" id="home-panel">
+                <div class="welcome-section">
+                    <h1 class="welcome-title">🚀 ComfyUI 智能说明书 & AI 学习助手</h1>
+                    <p class="welcome-desc">
+                        这是一个为 ComfyUI 新手与进阶用户打造的交互式节点说明书。左侧侧边栏已为您构建了与 ComfyUI 客户端右键菜单完全一致的树状分类结构。
+                        在左侧选择具体菜单分类，或在上方直接搜索，即可加载对应的节点详情。
+                    </p>
+                </div>
+                
+                <section class="learning-panel">
+                    <div class="learning-header">
+                        <div>
+                            <div class="learning-kicker">ComfyUI 连线心法</div>
+                            <h2 class="learning-title">先确认数据类型，再决定节点位置</h2>
+                            <p class="learning-copy">
+                                ComfyUI 中的“线”不能随意连接：输出插槽和输入插槽的数据类型必须匹配，其对应的颜色也是一致的。
+                                学习新节点时，重点看三件事：它需要输入什么数据、输出什么结果、以及其关键参数会如何影响画面。
+                            </p>
+                        </div>
+                        <div class="type-legend">
+                            <div class="legend-item"><span class="io-socket socket-model"></span>MODEL：大模型，常接采样器</div>
+                            <div class="legend-item"><span class="io-socket socket-conditioning"></span>CONDITIONING：正反向提示词条件</div>
+                            <div class="legend-item"><span class="io-socket socket-latent"></span>LATENT：潜空间，采样前后传递</div>
+                            <div class="legend-item"><span class="io-socket socket-image"></span>IMAGE：普通像素图像，用于预览或处理</div>
+                            <div class="legend-item"><span class="io-socket socket-vae"></span>VAE：负责 IMAGE 与 LATENT 编解码转换</div>
+                            <div class="legend-item"><span class="io-socket socket-clip"></span>CLIP：把提示词文本转化为模型条件</div>
+                        </div>
+                    </div>
+
+                    <div class="workflow-recipes">
+                        <div class="workflow-recipe">
+                            <div class="recipe-title">基础文生图 (Text to Image)</div>
+                            <div class="recipe-flow">
+                                <span class="flow-node">CheckpointLoader</span> →
+                                <span class="flow-node">CLIPTextEncode x2</span> →
+                                <span class="flow-node">EmptyLatentImage</span> →
+                                <span class="flow-node">KSampler</span> →
+                                <span class="flow-node">VAEDecode</span> →
+                                <span class="flow-node">SaveImage</span>
+                            </div>
+                        </div>
+                        <div class="workflow-recipe">
+                            <div class="recipe-title">图生图 / 局部重绘 (Img2Img / Inpaint)</div>
+                            <div class="recipe-flow">
+                                <span class="flow-node">LoadImage</span> →
+                                <span class="flow-node">VAEEncode</span> →
+                                <span class="flow-node">KSampler</span>
+                                <span>(denoise 0.3-0.7)</span> →
+                                <span class="flow-node">VAEDecode</span>
+                            </div>
+                        </div>
+                        <div class="workflow-recipe">
+                            <div class="recipe-title">ControlNet 条件控制 (Canny/Pose)</div>
+                            <div class="recipe-flow">
+                                <span class="flow-node">LoadImage</span> →
+                                <span class="flow-node">Canny预处理器</span> →
+                                <span class="flow-node">ControlNetApply</span> →
+                                <span class="flow-node">KSampler (接正向)</span>
+                            </div>
+                        </div>
+                        <div class="workflow-recipe">
+                            <div class="recipe-title">双采样高清放大 (Hi-Res Fix)</div>
+                            <div class="recipe-flow">
+                                <span class="flow-node">KSampler 1</span> →
+                                <span class="flow-node">LatentUpscale</span> →
+                                <span class="flow-node">KSampler 2 (denoise 0.3-0.5)</span> →
+                                <span class="flow-node">VAEDecode</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="task-chips">
+                        <button class="task-chip quick-search" data-query="文生图">文生图基础</button>
+                        <button class="task-chip quick-search" data-query="图生图">图生图与重绘</button>
+                        <button class="task-chip quick-search" data-query="ControlNet">ControlNet 结构控制</button>
+                        <button class="task-chip quick-search" data-query="修脸">修脸与局部细节</button>
+                        <button class="task-chip quick-search" data-query="放大">高清放大与超分</button>
+                        <button class="task-chip quick-search" data-query="提示词">提示词与条件控制</button>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Panel 2: Global Map -->
+            <div class="panel" id="map-panel">
+                <div class="section-label">🗺️ 功能分类地图</div>
+                <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:16px;">点击下方地图上的分类卡片，可直接检索该大分类下的全部节点。</p>
+                <div class="function-map" id="function-map"></div>
+            </div>
+
+            <!-- Panel 3: Glossary -->
+            <div class="panel" id="glossary-panel">
+                <div class="glossary-panel">
+                    <div class="section-label">📕 专业名词速查词典</div>
+                    <p class="glossary-copy">
+                        输入您在 ComfyUI 说明中看不懂的专有名词缩写或英文概念，如 CLIP、VAE、CFG、denoise、SIGMAS 等，了解其深层作用与生图关系。
+                    </p>
+                    <input class="glossary-search" id="glossary-search" placeholder="搜索术语、英文缩写或中文含义...">
+                    <div class="glossary-chip-row" id="glossary-chips"></div>
+                    <div class="glossary-results" id="glossary-results"></div>
+                </div>
+            </div>
+
+            <!-- Panel 4: Packages Tree -->
+            <div class="panel" id="pkg-panel">
+                <div class="section-label">🔌 插件安装包分类</div>
+                <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:16px;">按插件安装包（custom_nodes）进行分组检索，方便查找特定插件引入的节点。</p>
+                <div class="pkg-explorer-container" style="background-color: var(--sidebar-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 20px;">
+                    <input type="text" class="sidebar-search" id="pkg-search-input" placeholder="输入关键字搜索插件包..." style="width: 100%; max-width: 400px; margin: 0 0 16px 0; padding: 8px 12px; border-radius: 4px; background: #0b0f19; border: 1px solid var(--border-color); color: white; outline: none;">
+                    <div class="tree-container" id="pkg-tree" style="max-height: calc(100vh - 280px); overflow-y: auto;">
+                        <!-- Dynamic Packages Tree -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Panel 5: Explorer (Node Grid list) -->
+            <div class="panel" id="explorer-panel">
+                <div class="explorer-header">
+                    <div class="breadcrumbs" id="breadcrumbs">全部节点</div>
+                </div>
+                <div class="node-grid" id="node-grid">
+                    <!-- Cards will render here -->
+                </div>
+                <div class="load-more-container" id="load-more-container" style="display: none;">
+                    <button class="btn-load-more" id="btn-load-more">显示更多匹配节点</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast Notification for Copying -->
+    <div class="toast-notification" id="toast">
+        📋 提问词已成功复制到剪贴板！可以直接发送给 AI 助手了。
+    </div>
+
+
+    <!-- Inject Node Data -->
+    <script src="data/nodes_data.js"></script>
+
+    <!-- Frontend App Logic -->
+    <script src="app.js" defer></script>
+
+    <!-- Floating Selection Bar for ComfyUI Integration -->
+    <div id="floating-selection-bar" class="floating-bar">
+        <div class="floating-bar-content">
+            <div class="selection-info">
+                <span class="selection-count">已选中 <strong id="selected-count-badge">0</strong> 个节点</span>
+                <span class="selection-tip">可批量导入 ComfyUI</span>
+            </div>
+            <div class="floating-bar-actions">
+                <button id="btn-copy-selected" class="btn btn-primary">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="margin-right: 6px; display: inline-block; vertical-align: middle;">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/>
+                    </svg>
+                    一键复制 (Ctrl+V 导入)
+                </button>
+                <a id="lnk-jump-comfyui" href="http://127.0.0.1:8188" target="_blank" class="btn btn-secondary">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="margin-right: 6px; display: inline-block; vertical-align: middle;">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                    </svg>
+                    跳转 ComfyUI
+                </a>
+                <button id="btn-clear-selection" class="btn btn-link">清空</button>
+                <button id="btn-config-comfyui" class="btn btn-icon-only" title="配置 ComfyUI 地址">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
